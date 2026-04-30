@@ -1,0 +1,57 @@
+table:
+  name: subscriptions
+  description: "Subscription records. One row per subscription (user may have multiple over time)."
+  schema: "public"
+  
+  keys:
+    - name: subscription_id
+      type: primary
+      description: "Unique subscription identifier"
+    - name: user_id
+      type: foreign
+      references: users.user_id
+      description: "Links to user who owns this subscription"
+  
+  dimensions:
+    - name: subscription_id
+      type: integer
+      description: "Unique subscription identifier"
+      
+    - name: user_id
+      type: integer
+      description: "User who owns this subscription"
+      
+    - name: plan
+      type: string
+      description: "Subscription plan tier"
+      values: ["annual", "free", "monthly"]
+      
+    - name: start_date
+      type: timestamp
+      description: "Date subscription was activated"
+      
+    - name: end_date
+      type: timestamp
+      description: "Date subscription ended or expires (NULL if active)"
+      
+    - name: status
+      type: string
+      description: "Current state of the subscription"
+      values: ["active", "canceled", "expired"]
+  
+  measures:
+    - name: subscription_count
+      type: numeric
+      description: "Count of subscriptions"
+      agg: count
+      
+    - name: active_subscriptions
+      type: numeric
+      description: "Count of active subscriptions"
+      agg: count
+      
+    - name: unique_subscribers
+      type: numeric
+      description: "Distinct count of users with subscriptions"
+      agg: count_distinct
+      field: user_id

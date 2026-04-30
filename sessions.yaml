@@ -1,0 +1,59 @@
+table:
+  name: sessions
+  description: "User session activity. One row per session (user listening/browsing activity)."
+  schema: "public"
+  
+  keys:
+    - name: session_id
+      type: primary
+      description: "Unique session identifier"
+    - name: user_id
+      type: foreign
+      references: users.user_id
+      description: "User who initiated this session"
+  
+  dimensions:
+    - name: session_id
+      type: integer
+      description: "Unique session identifier"
+      
+    - name: user_id
+      type: integer
+      description: "User who initiated this session"
+      
+    - name: session_date
+      type: timestamp
+      description: "Date and time session started"
+      
+    - name: duration_minutes
+      type: integer
+      description: "Length of session in minutes"
+      
+    - name: activity_type
+      type: string
+      description: "Type of activity in the session"
+      values: ["browse", "listen", "read"]
+  
+  measures:
+    - name: session_count
+      type: numeric
+      description: "Count of sessions"
+      agg: count
+      
+    - name: total_session_minutes
+      type: numeric
+      description: "Sum of all session durations in minutes"
+      agg: sum
+      field: duration_minutes
+      
+    - name: average_session_duration
+      type: numeric
+      description: "Average session duration in minutes"
+      agg: avg
+      field: duration_minutes
+      
+    - name: active_session_users
+      type: numeric
+      description: "Distinct count of users with sessions"
+      agg: count_distinct
+      field: user_id

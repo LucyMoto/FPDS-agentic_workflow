@@ -1,0 +1,52 @@
+version: "1.0"
+namespace: "music_app"
+
+# Relationships (explicit join paths for the SQL Assistant)
+relationships:
+  - name: subscriptions_to_users
+    from_table: subscriptions
+    from_key: user_id
+    to_table: users
+    to_key: user_id
+    type: many_to_one
+    description: "Many subscriptions can belong to one user"
+    
+  - name: sessions_to_users
+    from_table: sessions
+    from_key: user_id
+    to_table: users
+    to_key: user_id
+    type: many_to_one
+    description: "Many sessions can belong to one user"
+    
+  - name: payments_to_subscriptions
+    from_table: payments
+    from_key: subscription_id
+    to_table: subscriptions
+    to_key: subscription_id
+    type: many_to_one
+    description: "Many payments can belong to one subscription"
+    
+  - name: payments_to_users
+    from_table: payments
+    from_key: subscription_id
+    to_table: subscriptions
+    to_key: subscription_id
+    then_to_table: users
+    then_to_key: user_id
+    type: many_to_one
+    description: "Payments → Subscriptions → Users (indirect path)"
+
+# Table index (reference guide)
+tables:
+  - file: users.yaml
+    description: "User master data"
+    
+  - file: subscriptions.yaml
+    description: "Subscription records with plan and status"
+    
+  - file: sessions.yaml
+    description: "User session activity (browse, listen, read)"
+    
+  - file: payments.yaml
+    description: "Payment transactions"
