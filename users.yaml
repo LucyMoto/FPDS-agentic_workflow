@@ -1,0 +1,39 @@
+table:
+  name: users
+  description: "User master data. One row per user in the platform."
+  schema: "public"
+  
+  keys:
+    - name: user_id
+      type: primary
+      description: "Unique user identifier"
+  
+  dimensions:
+    - name: user_id
+      type: integer
+      description: "Unique user identifier"
+      
+    - name: signup_date
+      type: timestamp
+      description: "Date and time user signed up"
+      
+    - name: country
+      type: string
+      description: "User's country"
+      
+    - name: device_type
+      type: string
+      description: "Primary device type used by the user"
+      values: ["Android", "iOS", "Web"]
+  
+  measures:
+    - name: user_count
+      type: numeric
+      description: "Count of users"
+      agg: count
+      
+    - name: unique_countries
+      type: numeric
+      description: "Distinct count of countries with users"
+      agg: count_distinct
+      field: country

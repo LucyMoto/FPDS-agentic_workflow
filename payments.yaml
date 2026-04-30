@@ -1,0 +1,48 @@
+table:
+  name: payments
+  description: "Payment transaction history. One row per payment."
+  schema: "public"
+  
+  keys:
+    - name: payment_id
+      type: primary
+      description: "Unique payment identifier"
+    - name: subscription_id
+      type: foreign
+      references: subscriptions.subscription_id
+      description: "Subscription this payment is for"
+  
+  dimensions:
+    - name: payment_id
+      type: integer
+      description: "Unique payment identifier"
+      
+    - name: subscription_id
+      type: integer
+      description: "Associated subscription"
+      
+    - name: payment_date
+      type: timestamp
+      description: "Date and time payment was processed"
+      
+    - name: method
+      type: string
+      description: "Payment method used"
+      values: ["apple_pay", "card", "google_pay", "paypal"]
+  
+  measures:
+    - name: amount_usd
+      type: numeric
+      description: "Payment amount in USD"
+      agg: sum
+      
+    - name: payment_count
+      type: numeric
+      description: "Count of payments"
+      agg: count
+      
+    - name: average_payment_amount
+      type: numeric
+      description: "Average payment amount in USD"
+      agg: avg
+      field: amount_usd
